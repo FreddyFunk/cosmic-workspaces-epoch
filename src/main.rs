@@ -19,12 +19,14 @@ use cosmic::iced::mouse::ScrollDelta;
 use cosmic::iced::platform_specific::shell::commands::layer_surface::{
     destroy_layer_surface, get_layer_surface,
 };
+use cosmic::iced::runtime::platform_specific::wayland::CornerRadius;
 use cosmic::iced::runtime::platform_specific::wayland::layer_surface::{
-    IcedOutput, SctkLayerSurfaceSettings,
+    IcedMargin, IcedOutput, SctkLayerSurfaceSettings,
 };
 use cosmic::iced::window::Id as SurfaceId;
 use cosmic::iced::{self, Size, Subscription, Task};
 use cosmic::scroll::DiscreteScrollState;
+use cosmic::surface::action::LiveSettings;
 use cosmic::{cctk, dbus_activation};
 use cosmic_comp_config::CosmicCompConfig;
 use cosmic_config::CosmicConfigEntry;
@@ -236,6 +238,11 @@ impl App {
             },
         );
         cosmic::surface::surface_task::<Msg>(cosmic::surface::action::simple_layer_shell::<Msg>(
+            || LiveSettings {
+                padding: Some(IcedMargin::default()),
+                corners: Some(CornerRadius::default()),
+                blur: Some(true),
+            },
             move || SctkLayerSurfaceSettings {
                 id,
                 keyboard_interactivity: KeyboardInteractivity::Exclusive,
